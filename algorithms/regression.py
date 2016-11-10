@@ -7,6 +7,7 @@ from sklearn import preprocessing, cross_validation
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt 
 from matplotlib import style
+import pickle
 
 style.use('ggplot')
 
@@ -43,11 +44,8 @@ x_lately = x[-forecast_out:]
 #features
 x = x[:-forecast_out:]
 
-# labels
-y = np.array(df['label'])
-
 df.dropna(inplace=True)
-
+# labels
 y = np.array(df['label'])
 
 # test_size = 20% of data as testing data
@@ -56,6 +54,15 @@ x_train, x_test, y_train, y_test = cross_validation.train_test_split(x, y, test_
 clf = LinearRegression(n_jobs=-1)
 #train your model 
 clf.fit(x_train, y_train)
+
+#saving your model
+with open('lenearregression.pickle', 'wb') as f:
+	pickle.dump(clf, f)
+
+#load classifier
+pickle_in = open('lenearregression.pickle', 'rb')
+clf = pickle.load(pickle_in)
+
 #test your model
 accuracy = clf.score(x_test, y_test)
 
@@ -64,8 +71,6 @@ accuracy = clf.score(x_test, y_test)
 
 #prediction
 forecast_set = clf.predict(x_lately)
-
-print (forecast_set, accuracy, forecast_out)
 
 df['Forecast'] = np.nan
 last_date = df.iloc[-1].name
