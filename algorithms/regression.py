@@ -26,8 +26,8 @@ df = df[['Adj. Close', 'HL_PCT', 'PCT_change', 'Adj. Volume']]
 forecast_column = 'Adj. Close'
 df.fillna(-99999, inplace=True)
 
-# Ajd Price 10 days into the future
-forecast_out = int(math.ceil(0.01*len(df)))
+# Ajd Price 1 days into the future
+forecast_out = int(math.ceil(0.1*len(df)))
 df['label'] = df[forecast_column].shift(-forecast_out)
 
 
